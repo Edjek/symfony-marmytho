@@ -1,124 +1,75 @@
-# Marmytho - Un site créé pour pratiquer Symfony 7
+# Projet Symfony Marmytho
+
+## Prérequis
+
+-   PHP 8.2
+-   Composer
+-   Symfony CLI
 
 ## Installation
 
-1. Créer un projet Symfony 7.1
+1. Cloner le projet :
 
 ```bash
-symfony new marmytho --version="7.1.*"  --webapp
+git clone https://github.com/Edjek/symfony-marmytho
 ```
 
-2. Créer un certificat auto-signé pour le serveur de développement
+2. Se rendre dans le dossier du projet :
 
 ```bash
-symfony server:ca:install
+cd symfony-marmytho
 ```
 
-3. Démarrer le serveur de développement
+3. Installer les dépendances :
+
+```bash
+composer install
+```
+
+4. Créer un fichier `.env.local` à la racine du projet et y ajouter les informations de connexion à la base de données
+
+```env
+DATABASE_URL="mysql://db_user:db_password@db_host:db_port/db_name"
+```
+
+5. Créer la base de données :
+
+```bash
+php bin/console doctrine:database:create
+```
+
+6. Générer le fichier de migration et lancer les migrations :
+
+```bash
+php bin/console make:migration
+
+php bin/console doctrine:migrations:migrate
+```
+
+7. Lancer les fixtures :
+
+```bash
+php bin/console doctrine:fixtures:load
+```
+
+Un utilisateur admin est créé avec identifiant et mot de passe suivants :
+
+-   admin@gmail.com
+-   administrateur
+
+Cet utilisateur a les droits d'administration sur le site. Une fois connecté, il peut acceder à la page d'administration en cliquant sur le bouton "Dashboard" dans le menu de navigation.
+
+8. Lancer le serveur :
 
 ```bash
 symfony serve -d
 ```
 
-4. Ouvrir le navigateur à l'adresse https://localhost:8000
+9. Se rendre sur http://localhost:8000
 
-## Development
+10. Enjoy !
 
-1. Créer un contrôleur
+---
 
-```bash
-symfony console make:controller IngredientController
-```
+[🏠 Retour au sommaire](#)
 
-2. Créer une entité
-
-```bash
-symfony console make:entity Ingredient
-```
-
-3. Créer la base de données
-
-```bash
-symfony console doctrine:database:create
-```
-
-4. Créer une migration
-
-```bash
-symfony console make:migration
-```
-
-5. Exécuter la migration
-
-```bash
-symfony console doctrine:migrations:migrate
-```
-
-6. Créer un formulaire
-
-```bash
-symfony console make:form IngredientType
-```
-
-7. Dans le Controller créer :
-
--   Une méthode `list()` pour afficher la liste des ingrédients
--   Une méthode `show()` pour afficher un ingrédient
--   Une méthode `new` pour afficher le formulaire de création d'un ingrédient
--   Une méthode `edit` pour afficher le formulaire de modification d'un ingrédient
--   Une méthode `delete` pour afficher la suppression d'un ingrédient
-
-Exemple de méthode `new` :
-
-```php
-use App\Form\IngredientType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
-#[Route('/ingredient')]
-public function new(Request $request, EntityManager $em): Response
-{
-    $ingredient = new Ingredient();
-    $form = $this->createForm(IngredientType::class, $ingredient);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em->persist($ingredient);
-        $em->flush();
-
-        return $this->redirectToRoute('ingredient_index');
-    }
-
-    return $this->render('ingredient/new.html.twig', [
-        'ingredient' => $ingredient,
-        'form' => $form-,
-    ]);
-}
-```
-
-8. Créer des Fixtures
-
-    1. Installer le bundle DoctrineFixturesBundle
-
-    ```bash
-    composer require --dev orm-fixtures
-    ```
-
-    2. Créer une classe de fixtures
-
-    ```bash
-    symfony console make:fixtures IngredientFixtures
-    ```
-
-    3. Charger les fixtures
-
-    ```bash
-    symfony console doctrine:fixtures:load
-    ```
-
-    4. Installer le bundle Faker
-
-    ```bash
-    composer require fakerphp/faker --dev
-    ```
