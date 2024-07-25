@@ -36,7 +36,7 @@
 					<tr>
 						<th scope="row">{{ ingredient.id }}</th>
 						<td>{{ ingredient.name }}</td>
-						<td><img src={{ ingredient.filename }} alt={{ ingredient.name }} class="img-fluid img-thumbnail"></td>
+						<td><img src={{ ingredient.filename }} alt={{ ingredient.name }} class="img-fluid img-thumbnail w-50"></td>
 						<td>{{ ingredient.price }}</td>
 						<td>
 							<a href={{ path('admin_ingredient_edit', { 'id': ingredient.id} )}} class="btn btn-primary">Modifier</a>
